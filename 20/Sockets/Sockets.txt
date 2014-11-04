@@ -1,0 +1,1 @@
+./Debug/server.c.o ./Debug/tcpClient.c.o ./Debug/udpClient.c.o
