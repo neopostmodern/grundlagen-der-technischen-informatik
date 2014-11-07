@@ -78,17 +78,27 @@ int main(int argc, char *argv[])
 	    printf("connection  ERROR!!!!\n");
 	}
 
-    unsigned char buffer[] = strcat("GET / HTTP/1.1\nHOST: ", argv[1]);
+    char buffer[MAX_BUFFER_LENGTH];
+	strcpy(buffer, "GET / HTTP/1.1\nHOST: ");
+	strcat(buffer, argv[1]);
+	strcat(buffer, "\nConnection: close");
+	printf("%s\n\n", buffer);
 
     /* ******************************************************************
     TO BE DONE:  Send data
     ******************************************************************* */
+	printf("Start send...");
 	if(send(sockfd, buffer, sizeof(buffer), 0) < 0){
-	    printf("sending ERROR!!!!");
-	}
+	    printf("sending ERROR!");
+	}	
+	printf("Send complete.");
 	
-	recv(sockfd, buffer, 1000, 0);
-	printf("%s\n", buffer);
+	char recv_buffer[1];
+	
+	while (1) {
+		recv(sockfd, recv_buffer, 1, 0);
+		printf("%s\n", recv_buffer);
+	}
 
 
     /* ******************************************************************

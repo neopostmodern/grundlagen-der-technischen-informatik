@@ -5,8 +5,8 @@
   <TabInfoArray Name="TabInfoArray">
     <TabInfo>
       <wxString Value="/home/mrssheep/Documents/Studium/3-Semester/Rechnernetze&amp;VerteilteSysteme/Hausaufgaben/21/main.c" Name="FileName"/>
-      <int Value="68" Name="FirstVisibleLine"/>
-      <int Value="80" Name="CurrentLine"/>
+      <int Value="71" Name="FirstVisibleLine"/>
+      <int Value="84" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds"/>
     </TabInfo>
