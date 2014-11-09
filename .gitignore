@@ -1,0 +1,7 @@
+*~
+.codelite/
+.clang/
+.workspace
+.project
+*.mk
+Makefile
