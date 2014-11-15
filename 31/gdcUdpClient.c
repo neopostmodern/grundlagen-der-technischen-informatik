@@ -17,7 +17,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <time.h>
 
 #define MAX_BUFFER_LENGTH 100
 
@@ -39,6 +38,12 @@ void unpackData(unsigned char *buffer, unsigned int *a, unsigned int *b) {
     *b = (buffer[2]<<8) | buffer[3];
 }
 
+int min(unsigned int a, unsigned int b) {
+    if(a < b) return a;
+
+    else return b;
+}
+
 int gcd(unsigned int a, unsigned int b) {
     int i;
     int gcd = 1;
@@ -51,10 +56,6 @@ int gcd(unsigned int a, unsigned int b) {
     return gcd;
 }
 
-int min(unsigned int a, unsigned int b) {
-    if(a < b) return a;
-    else return b;
-}
 
 int main(int argc, char *argv[])
 {
@@ -64,78 +65,54 @@ int main(int argc, char *argv[])
     int serverPort;
     int a = 0;
     int b = 0;
-    struct timespec tp1, tp2;
-
-    printf("TCP client example\n\n");
 
     if (argc != 5) {
-        fprintf(stderr,"Usage: tcpClient serverName serverPort int1 int2\n");
+        fprintf(stderr,"Usage: udpClient serverName serverPort int1 int2\n");
         exit(1);
     }
 
+	//process args
     serverPort = atoi(argv[2]);
     a = atoi(argv[3]);
     b = atoi(argv[4]);
 
-    //Resolv hostname to IP Address
+    //resolve hostname to IP Address
     if ((he=gethostbyname(argv[1])) == NULL) {  // get the host info
         herror("gethostbyname");
         exit(1);
     }
-
-    /* ******************************************************************
-    TO BE DONE: Create socket
-    ******************************************************************* */
-
+    
+	//create socket
 	if((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         printf("Socket not created!");
         exit(1);
     }
 
-    //setup transport address
+    //setup address
     their_addr.sin_family = AF_INET;
     their_addr.sin_port = htons(serverPort);
     their_addr.sin_addr = *((struct in_addr *)he->h_addr);
     memset(their_addr.sin_zero, '\0', sizeof their_addr.sin_zero);
 
-    /* ******************************************************************
-    TO BE DONE:  Binding
-    ******************************************************************* */
 
+	//setup buffer
     unsigned char buffer[4];
-
     packData(buffer, a, b);
 
-    /* ******************************************************************
-    TO BE DONE:  Send data
-    ******************************************************************* */
-    clock_gettime(CLOCK_REALTIME, &tp1);
+
+    //send data
+    printf("rpc.gcd(%d,%d);\n", a, b);
     int result = sendto(sockfd, buffer, sizeof(buffer), 0, (const struct sockaddr *)&their_addr, sizeof(their_addr));
-    clock_gettime(CLOCK_REALTIME, &tp2);
-
-    if(result < 0){
-	printf("sending ERROR!!!!");
+	if(result < 0){
+		printf("sending ERROR!!!!");
     }
 
-    printf("tp1: %ld\n", (tp1.tv_nsec));
-    printf("tp2: %ld\n", (tp2.tv_nsec));
 
-
-    if(tp2.tv_nsec < tp1.tv_nsec){
-	tp2.tv_nsec += 1000000000;
-    	printf("\n\n\n time warp!!!!!\n\n\n");
-    }
-    printf("send time in ns: %ld\n", (tp2.tv_nsec - tp1.tv_nsec));
-
-
+	//wait for rpc response
 	recv(sockfd, buffer, sizeof(buffer), 0);
 	unpackData(buffer, &a, &b);
-	printf("udp received %d and %d. GCD is: %d\n ", a, b, gcd(a,b));
+	printf("rpc.gcd(a,b) = %d\n", a);
 
-
-    /* ******************************************************************
-    TO BE DONE:  Close socket
-    ******************************************************************* */
 
 	close(sockfd);
 	 
