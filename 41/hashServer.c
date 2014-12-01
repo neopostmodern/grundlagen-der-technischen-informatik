@@ -360,7 +360,7 @@ void handleQuery(char *commandName, unsigned int key, unsigned int value, unsign
 
 		if(val == -1){
 			strcpy(commandName, "nof");
-			key = value = 0;
+			// key = value = 0;
 		}else{
 			strcpy(commandName, "val");
 			value = val;
@@ -368,13 +368,13 @@ void handleQuery(char *commandName, unsigned int key, unsigned int value, unsign
 	} else if(isDelQuery(commandName)) {				// -- process del cmd
 		if(hashDel(table, key) == -1){
 			strcpy(commandName, "err");
-			key = value = 0;
+			// key = value = 0;
 		}else{
 			strcpy(commandName, "ok!");
 		}
 	} else {
 		strcpy(commandName, "err");
-		key = value = 0;
+		// key = value = 0;
 	}
 	
 	printf("Table modification complete.\n");
@@ -410,7 +410,7 @@ int nextFreeRequestId() {
 	}
 	
 	printf("!!! CRAZY PANICK SITUATION !!! INTERNAL SERVER OVERLOAD !!!");
-	return 0;
+	return -1;
 }
 
 			
