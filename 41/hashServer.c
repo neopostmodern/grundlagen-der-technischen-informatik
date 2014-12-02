@@ -76,7 +76,8 @@ int hashSet(struct hashnode *table, int key, int value)
 		}
 		// if keyExists -> replace value
 		else if(node->key == key){
-			return -1;
+			node->value = value;
+			return 0;
 		}
 		// if nextNode == 0 -> insert at end of linkedList
 		else if(node->next == 0){
@@ -235,13 +236,13 @@ int isActiveQuery(char *commandName) {
 }
 
 int isGetQuery(char *commandName) {
-	return strcmp(commandName, "get") == 0 || strcmp(commandName, "xgt") == 0;
+	return strcmp(commandName, "get") == 0 || strcmp(commandName, "GET") == 0 || strcmp(commandName, "xgt") == 0;
 }
 int isSetQuery(char *commandName) {
-	return strcmp(commandName, "set") == 0 || strcmp(commandName, "xst") == 0;
+	return strcmp(commandName, "set") == 0 || strcmp(commandName, "SET") == 0 || strcmp(commandName, "xst") == 0;
 }
 int isDelQuery(char *commandName) {
-	return strcmp(commandName, "del") == 0 || strcmp(commandName, "xdl") == 0;
+	return strcmp(commandName, "del") == 0 || strcmp(commandName, "DEL") == 0 || strcmp(commandName, "xdl") == 0;
 }
 int isOkQuery(char *commandName) {
 	return strcmp(commandName, "ok!") == 0 || strcmp(commandName, "xok") == 0;
@@ -258,21 +259,39 @@ int isValueQuery(char *commandName) {
 
 void convertToClientCommand(char *commandName) {	
 	if(isSetQuery(commandName)) {						// -- process set cmd
-		strcpy(commandName, "set");		
+		strcpy(commandName, "SET");		
 	} else if(isGetQuery(commandName)) {				// -- process get cmd
-		strcpy(commandName, "get");			
+		strcpy(commandName, "GET");			
 	} else if(isDelQuery(commandName)) {				// -- process del cmd
-		strcpy(commandName, "del");
+		strcpy(commandName, "DEL");
 	} else if(isOkQuery(commandName)) {					// -- process del cmd
-		strcpy(commandName, "ok!");
+		strcpy(commandName, "OK!");
 	}  else if(isErrorQuery(commandName)) {				// -- process del cmd
-		strcpy(commandName, "err");
+		strcpy(commandName, "ERR");
 	}  else if(isNotFoundQuery(commandName)) {				// -- process del cmd
-		strcpy(commandName, "nof");
+		strcpy(commandName, "NOF");
 	}  else if(isValueQuery(commandName)) {				// -- process del cmd
-		strcpy(commandName, "val");
+		strcpy(commandName, "VAL");
 	} 
 }
+
+//void convertToClientCommand(char *commandName) {	
+//	if(isSetQuery(commandName)) {						// -- process set cmd
+//		strcpy(commandName, "set");		
+//	} else if(isGetQuery(commandName)) {				// -- process get cmd
+//		strcpy(commandName, "get");			
+//	} else if(isDelQuery(commandName)) {				// -- process del cmd
+//		strcpy(commandName, "del");
+//	} else if(isOkQuery(commandName)) {					// -- process del cmd
+//		strcpy(commandName, "ok!");
+//	}  else if(isErrorQuery(commandName)) {				// -- process del cmd
+//		strcpy(commandName, "err");
+//	}  else if(isNotFoundQuery(commandName)) {				// -- process del cmd
+//		strcpy(commandName, "nof");
+//	}  else if(isValueQuery(commandName)) {				// -- process del cmd
+//		strcpy(commandName, "val");
+//	} 
+//}
 
 void convertToInternalCommand(char *commandName) {	
 	if(isSetQuery(commandName)) {						// -- process set cmd
@@ -351,7 +370,7 @@ void handleQuery(char *commandName, unsigned int key, unsigned int value, unsign
 	if(isSetQuery(commandName)) {						// -- process set cmd
 		if(hashSet(table, key, value) == -1){
 			strcpy(commandName, "err");
-			key = value = 0;
+			// key = value = 0;
 		}else{
 			strcpy(commandName, "ok!");
 		}
@@ -367,7 +386,7 @@ void handleQuery(char *commandName, unsigned int key, unsigned int value, unsign
 		}
 	} else if(isDelQuery(commandName)) {				// -- process del cmd
 		if(hashDel(table, key) == -1){
-			strcpy(commandName, "err");
+			strcpy(commandName, "nof");
 			// key = value = 0;
 		}else{
 			strcpy(commandName, "ok!");
