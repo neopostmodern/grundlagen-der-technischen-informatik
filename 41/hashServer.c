@@ -49,6 +49,12 @@ int hashKey(int key)
 //max ten parallel
 struct client_request openClientRequests[10];
 
+// server
+unsigned long server_ip;
+int server_port;
+struct sockaddr_in server_addr; // connector's address information
+struct hostent *server_he;
+
 // successor
 int successor_port, successor_sockfd, succesor_status;
 struct sockaddr_in successor_their_addr; // connector's address information
@@ -437,23 +443,24 @@ int nextFreeRequestId() {
 int main(int argc, char *argv[])
 {	
     // usage check / notification
-    if(argc != 5) {
-        printf("usage Error: use: hashServer udpPortNumber offset[0,64,128,196] successorAddress successorPort\n\n");
+    if(argc != 6) {
+        printf("usage Error: use: hashServer serverAddress serverPort offset[0,64,128,196] successorAddress successorPort\n\n");
         exit(1);
     }
 	
 	// offset
-	offset = atoi(argv[2]);
+	offset = atoi(argv[3]);
 	
 	// alloc hashtable
 	table = (struct hashnode *) malloc(sizeof(struct hashnode) * 64);
 	
 	// set up successor	
-    successor_port = atoi(argv[4]);
-    if ((successor_he = gethostbyname(argv[3])) == NULL) {  // get the host info
+    successor_port = atoi(argv[5]);
+    if ((successor_he = gethostbyname(argv[4])) == NULL) {  // get the host info
         herror("gethostbyname");
         exit(1);
     }
+	
     successor_their_addr.sin_family = AF_INET;
     successor_their_addr.sin_port = htons(successor_port);
     successor_their_addr.sin_addr = *((struct in_addr *)successor_he->h_addr);
@@ -479,14 +486,29 @@ int main(int argc, char *argv[])
     // setup UDP address
     myaddr.sin_family = AF_INET;
     myaddr.sin_addr.s_addr = INADDR_ANY;
-    myaddr.sin_port = htons(atoi(argv[1])); // UDP 
+    myaddr.sin_port = htons(atoi(argv[2])); // UDP 
 
     // init udp sock
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
     if(bind(sockfd, (struct sockaddr *)&myaddr, sizeof(myaddr)) < 0){
 		printf("FATAL: UDP binding error\n");
     }
+	
+	
+	if ((server_he = gethostbyname(argv[1])) == NULL) {  // get the host info
+		herror("gethostbyname");
+		exit(1);
+	}
+	server_addr.sin_addr = *((struct in_addr *)successor_he->h_addr);
+	server_ip = server_addr.sin_addr.s_addr;
+	server_port = atoi(argv[2]);
+	
     
+	printf("Post-poning finger-table setup...\n");
+	sleep(5);
+	printf("Setup finger-tables:\n");
+	
+	printf("Complete.\n\n");
 
 	// ------- CORE LOOP -----------
     while(1) {
