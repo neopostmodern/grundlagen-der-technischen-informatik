@@ -1,0 +1,6 @@
+Without Fingertable:
+time elapsed [set:191152], [get:174658], [del:154351]
+
+With Fingertable:
+time elapsed [set:170335], [get:141378], [del:135098]
+
