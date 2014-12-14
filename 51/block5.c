@@ -47,6 +47,7 @@ unsigned char buffer[8];
 
 // DHT PEER
 int status;
+int server_port;
 struct sockaddr_in their_addr; // connector's address information
 struct hostent *he;
 socklen_t addrlen;
@@ -376,6 +377,10 @@ int rpcCall(int cmd, int k, int v)
     status = recvfrom(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *)&their_addr, &addrlen);
   }
 
+  // mega hardcode hack because their_addr is modified in recvfrom
+  their_addr.sin_port = server_port;
+
+
   unpackData(buffer, commandName_recv, &key_recv, &value_recv);
   printf("Received: %s %d %d \n", commandName_recv, key_recv, value_recv);
 
@@ -430,10 +435,12 @@ int main(int argc, char *const *argv)
     }
 
     their_addr.sin_family = AF_INET;
-    their_addr.sin_port = htons(atoi(argv[3]));
+    server_port = htons(atoi(argv[3]));
+    their_addr.sin_port = server_port;
     their_addr.sin_addr = *((struct in_addr *)he->h_addr);
     memset(their_addr.sin_zero, '\0', sizeof their_addr.sin_zero);
     addrlen = sizeof(their_addr);
+    printf("init port with %d\n", their_addr.sin_port);
 
 
     // straight from the docs:
