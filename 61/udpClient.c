@@ -112,29 +112,14 @@ void calcOffset(struct timespec *offset, struct timespec *t1, struct timespec *t
 
 
 	// offset = 0.5 * ((t2-t1)+(t3-t4))
-	int off;
-	off = timespec2ms(t2) - timespec2ms(t1);
-	off = off + timespec2ms(t3) - timespec2ms(t4);
-	off = off * 0.5;
-
-	ms2timespec(offset, off);
+	double nsec1, nsec2;
+	nsec1 = (t2->tv_sec - t1->tv_sec)*1000000000 + (t2->tv_nsec - t1->tv_nsec);
+	nsec2 = (t3->tv_sec - t4->tv_sec)*1000000000 + (t3->tv_nsec - t4->tv_nsec);
+	nsec1 = 0.5*(nsec1 + nsec2);
+	
+	offset->tv_sec = nsec1 / 1000000000;
+	offset->tv_nsec = nsec1 % 1000000000;
 }
-
-
-
-int timespec2ms(struct timespec *time){
-	return time->tv_sec*1000 + time->tv_nsec/1000000;
-}
-
-void ms2timespec(struct timespec *time, int ms){
-	time->tv_sec = ms/1000;
-	time->tv_nsec = ms*1000000%1000000000;
-
-	if(time->tv_nsec < 0 && time->tv_nsec != 0){
-		time->tv_nsec = time->tv_nsec * -1;
-	}
-}
-
 
 int main(int argc, char *argv[])
 {
