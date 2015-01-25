@@ -102,7 +102,57 @@ _Via Wireshark GUI:_
 **Anzahl IP Addressen**
 47 verschiedene
 
-## e)
+## e) 
+
+	00:0f:3d:fc:75:2b         /* Statistics -> Endpoints -> Find Frame
+    65.189.144.95
+   00:0d:56:c7:76:0e
+    192.168.0.4
+   ff:ff:ff:ff:ff:ff
+    192.168.0.255
+   00:11:25:43:ca:fe
+    192.168.0.2
+
+## f) 
+
+99,99% (62854/62856)      /* Statistics -> Protocol Hierarchy
+
+## g)
+
+ 90,07% (56616/62856)      /* ----------------- " ------------
+
+## h) 
+
+   HTTP                      /* --------------- " -----------
+   BitTorrent
+   RTSP
+   SSH
+   SSL
+   STUN
+   RELOADF
+   
+## i) 
+
+   DNS
+   NetBIOS Datagram Service
+   NetBIOS Name Server
+   RDT
+
+## j) 
+
+	IP
+   ARP
+
+## k)
+	ARP
+	BROWSER
+	BitTorrent
+	TCP
+	TLSv1
+	UDP
+
+## l)  
+   34
 
 ## m)
 
