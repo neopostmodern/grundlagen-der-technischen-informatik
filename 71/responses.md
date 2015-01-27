@@ -115,7 +115,11 @@ _Via Wireshark GUI:_
 
 ## f) 
 
-99,99% (62854/62856)      /* Statistics -> Protocol Hierarchy
+	Statistics -> Protocol Hierarchy
+
+**Percentage of packages using IP on network layer**
+
+99,99% (62854/62856)
 
 ## g)
 
@@ -133,35 +137,48 @@ _Via Wireshark GUI:_
    
 ## i) 
 
-   DNS
-   NetBIOS Datagram Service
-   NetBIOS Name Server
-   RDT
+	
+
+**Protocols using UDP**
+
+- DNS
+- NetBIOS Datagram Service
+- NetBIOS Name Server
+- RDT
 
 ## j) 
 
-	IP
-   ARP
+**Protocols in the network layer**
+
+IP
+ARP
 
 ## k)
-	ARP
-	BROWSER
-	BitTorrent
-	TCP
-	TLSv1
-	UDP
+
+**Protocols in the security layer**
+
+- ARP
+- BROWSER
+- BitTorrent
+- TCP
+- TLSv1
+- UDP
 
 ## l)  
-   34
+  
+**Number of DNS requests**
+
+34
 
 ## m)
 
 	Filter "ip.ttl > 200", "ip.ttl == 128" and "ip.ttl == 48"
 	
 **IP-Pakets with specific TTLs**
-23 pakets with more than 200
-16757 pakets with exactly 128
-105 pakets with exactly 48
+
+- 23 pakets with more than 200
+- 16757 pakets with exactly 128
+- 105 pakets with exactly 48
 
 ## n)
 
